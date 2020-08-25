@@ -1,0 +1,55 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@if (Request.Method.ToUpper() == "GET")
+{
+    <h1 class="display-4">Welcome</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="url">Url</label>
+            <input type="text" class="form-control" id="url" name="url" required />
+        </div>
+        <div class="form-group">
+            <label for="option">Select list:</label>
+            <select class="form-control" id="option" name="option">
+                <option selected>audio</option>
+                <option>video</option>
+            </select>
+        </div>
+
+        <div>
+            <button class="btn btn-success download" id="download" type="submit">Download</button>
+            <button class="btn btn-primary" type="button" id="loading" disabled style="display:none">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            </button>
+            <button class="btn btn-secondary" type="reset" id="reset">Clear</button>
+        </div>
+    </form>
+
+}
+else if (Request.Method.ToUpper() == "POST")
+{
+    @*<h1 class="display-4">@Model.Url</h1>*@
+    <h3><a class="nav-link text-dark" asp-area="" asp-page="/Download">Go to download page</a></h3>
+    <div class="row">
+
+        <pre>@Model.Output</pre>
+    </div>
+}
+
+@section scripts{
+    <script>
+        $("#download").on('click', function (event) {
+            $("#download").hide();
+            $("#loading").show();
+        });
+        $("#reset").on('click', function (event) {
+            $("#download").show();
+            $("#loading").hide();
+        });
+    </script>
+}
