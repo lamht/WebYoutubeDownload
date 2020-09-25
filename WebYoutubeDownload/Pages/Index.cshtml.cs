@@ -28,6 +28,9 @@ namespace WebYoutubeDownload.Pages
             if ("video".Equals(option?.ToLower()))
             {
                 cmd = $"cd download && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
+            } else if ("video1".Equals(option?.ToLower()))
+            {
+                cmd = $"cd download && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
             }
             _logger.LogInformation(cmd);
              Output = cmd.Bash();

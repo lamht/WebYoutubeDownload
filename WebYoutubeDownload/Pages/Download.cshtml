@@ -5,7 +5,8 @@
 }
 
 @{
-    string ShowDisplayName(string input){
+    string ShowDisplayName(string input)
+    {
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         char[] charArr = input.ToCharArray();
         int count = 0;
@@ -13,7 +14,7 @@
         {
             sb.Append(ch);
             count++;
-            if(count == 5)
+            if (count == 5)
             {
                 sb.Append(" ");
                 count = 0;
@@ -22,34 +23,38 @@
         }
         return sb.ToString();
     }
-}
 
-@{
-    <div class="table-responsive-md">
-        <table class="table">
-            <thead>
-                <tr class="bg-primary">
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var f in Model.Files)
-                {
-                    <tr>
-                        <td class="bg-info">@ShowDisplayName(f.Name) | @f.CreationTime </td>
-                        <td class="bg-info">@System.IO.Path.GetExtension(f.Name)</td>
-                        <td class="bg-info">
-                            <form action="download-file" method="post">
-                                <input type="hidden" name="file" value="@f.Name" />
-                                <button class="btn btn-primary">Download</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    string GetColorCard()
+    {
+        string[] colors = {
+        "bg-yellow border--yellow",
+        "bg-green border--green",
+        "bg-lime border--lime",
+        "bg-orange border--orange",
+        "bg-red border--red",
+        "bg-fuchsia border--fuchsia",
+        };
+        Random rnd = new Random();
+        int index = rnd.Next(0, 5);  // creates a number between 0 and 5
+        return colors[index];
+    }
 }
+<div class="row">
+    @foreach (var f in Model.Files)
+    {
+        <div class="col-md-6">
+            <div class="card text-white @GetColorCard() p-1 text-center">
+                <div class="card-body">
+                    <h2 class="card-title">@System.IO.Path.GetExtension(f.Name)</h2>
+                    <p class="card-text">@ShowDisplayName(f.Name) | @f.CreationTime </p>
+                    <form action="download-file" method="post">
+                        <input type="hidden" name="file" value="@f.Name" />
+                        <button class="btn btn-primary">Download</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
 
