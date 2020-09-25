@@ -23,7 +23,7 @@
 <div class="row">
     @foreach (var f in Model.Files)
     {
-        <div class="col-md-6">
+        <div class="col-md-6 mt-3">
             <div class="card text-white @GetColorCard() p-1 text-center">
                 <div class="card-body">
                     <h2 class="card-title">@System.IO.Path.GetExtension(f.Name)</h2>
