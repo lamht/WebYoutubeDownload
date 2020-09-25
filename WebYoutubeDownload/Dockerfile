@@ -18,6 +18,7 @@ RUN dotnet publish "WebYoutubeDownload.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 RUN apt update && apt install wget -y && apt install python3.7 -y && apt install ffmpeg -y \
-   && wget https://yt-dl.org/latest/youtube-dl -O /usr/local/bin/youtube-dl && chmod a+x /usr/local/bin/youtube-dl
+   && wget https://yt-dl.org/latest/youtube-dl -O /usr/local/bin/youtube-dl && chmod a+x /usr/local/bin/youtube-dl \
+   && ln -s /usr/bin/python3.7 /usr/local/bin/python
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "WebYoutubeDownload.dll"]
