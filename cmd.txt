@@ -1,0 +1,8 @@
+registry.heroku.com/pacific-refuge-91888/web
+-------
+docker build -f WebYoutubeDownload/DockerFile -t registry.heroku.com/pacific-refuge-91888/web .
+-------
+heroku container:push web -a pacific-refuge-91888
+-------
+heroku container:release web -a pacific-refuge-91888
+

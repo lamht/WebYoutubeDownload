@@ -31,8 +31,16 @@ namespace WebYoutubeDownload
             new FileExtensionContentTypeProvider().TryGetContentType(filePath, out string contentType);
             FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             _ = _downloadedCache.Add(filePath);
+            string fileName = file;
+            if(fileName.Length > 54) 
+            {
+                //4 extension charater
+
+                fileName = file.Substring(0, 50) + System.IO.Path.GetExtension(file);
+            }
+
             contentType = "application/octet-stream";
-            return File(fileStream, contentType, file);
+            return File(fileStream, contentType, fileName);
         }
     }
 }
