@@ -5,25 +5,6 @@
 }
 
 @{
-    string ShowDisplayName(string input)
-    {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        char[] charArr = input.ToCharArray();
-        int count = 0;
-        foreach (char ch in charArr)
-        {
-            sb.Append(ch);
-            count++;
-            if (count == 5)
-            {
-                sb.Append(" ");
-                count = 0;
-            }
-
-        }
-        return sb.ToString();
-    }
-
     string GetColorCard()
     {
         string[] colors = {
@@ -46,7 +27,7 @@
             <div class="card text-white @GetColorCard() p-1 text-center">
                 <div class="card-body">
                     <h2 class="card-title">@System.IO.Path.GetExtension(f.Name)</h2>
-                    <p class="card-text">@ShowDisplayName(f.Name) | @f.CreationTime </p>
+                    <p class="card-text">@f.Name | @f.CreationTime </p>
                     <form action="download-file" method="post">
                         <input type="hidden" name="file" value="@f.Name" />
                         <button class="btn btn-primary">Download</button>
