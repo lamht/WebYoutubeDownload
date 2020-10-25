@@ -17,10 +17,14 @@
             <select class="form-control" id="option" name="option">
                 <option selected value="audio">audio</option>
                 <option value="video">video 720p</option>
-                <option value="video1">video 1800p</option>
+                <option value="video1">video 1080p</option>
+                <option value="custom">Custom (Please fill custom params)</option>
             </select>
         </div>
-
+        <div class="form-group">
+            <label for="customParams">Custom Params</label>
+            <input type="text" class="form-control" id="customParams" name="customParams" />
+        </div>
         <div>
             <button class="btn btn-success download" id="download" type="submit">Download</button>
             <button class="btn btn-primary" type="button" id="loading" disabled style="display:none">
@@ -35,10 +39,28 @@
 else if (Request.Method.ToUpper() == "POST")
 {
     @*<h1 class="display-4">@Model.Url</h1>*@
-    <h3><a class="nav-link text-dark" asp-area="" asp-page="/Download">Go to download page</a></h3>
-    <div class="row">
 
-        <pre>@Model.Output</pre>
+
+    <div id="request-progress">
+        <h3>Request in progress ...</h3>
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="row">
+            <input type="hidden" value="@Model.Uuid" id="request-uuid" />
+            <pre id="uuid">@Model.Uuid</pre>
+        </div>
+    </div>
+    <div id="request-finished">
+        <h3>Request finished </h3>
+        <h4><a class="nav-link text-dark" asp-area="" asp-page="/Download">Go to download page</a></h4>
+        <div class="row">
+            <pre id="download-result">@Model.Uuid</pre>
+        </div>
+    </div>
+    <div id="request-error">
+        <h3>Request error</h3>
+        <h4> <a class="nav-link text-danger" asp-area="" asp-page="/">Retry</a></h4>        
     </div>
 }
 
@@ -52,5 +74,43 @@ else if (Request.Method.ToUpper() == "POST")
             $("#download").show();
             $("#loading").hide();
         });
+        $("#customParams").parent().hide();
+        $("#option").change(function () {
+            var value = $(this).val();
+            $("#customParams").parent().hide();
+            if (value === 'custom') {
+                $("#customParams").parent().show();
+            }
+        });
+
+        $("#request-error").hide();
+        $("#request-progress").show();
+        $("#request-finished").hide();
+
+        var request_uuid = $("#request-uuid").val();
+        if (request_uuid) {
+            var myInterval = setInterval(function () {
+                const url = "/?handler=downloadprogess&uuid=" + request_uuid;
+                $.getJSON(url, function (data) {
+                    if (data.code === -1) {
+                        $("#request-error").show();
+                        $("#request-progress").hide();
+                        $("#request-finished").hide();
+                        clearInterval(myInterval);
+                    } else if (data.code === 1) {
+                        $("#request-progress").show();
+                        $("#request-error").hide();
+                        $("#request-finished").hide();
+                    } else if (data.code === 2) {
+                        $("#request-finished").show();
+                        $("#request-error").hide();
+                        $("#request-progress").hide();
+                        $("#download-result").text(data.result);
+                        clearInterval(myInterval);
+                    }
+                });
+            }, 1000);
+        }
+
     </script>
 }

@@ -29,7 +29,7 @@ namespace WebYoutubeDownload.CronJob
         ///| +----------- min(0 - 59)
         ///+------------- sec(0 - 59)
         /// </summary>
-        private string Schedule => "* * */2 * * *"; //Runs every 2 hours
+        private string Schedule => "0 0 */5 * * *"; //Runs every 2 hours
         
 
         public DownloadedFilesCleaner(ILogger<DownloadedFilesCleaner> logger, 

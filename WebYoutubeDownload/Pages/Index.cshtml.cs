@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,29 +11,81 @@ namespace WebYoutubeDownload.Pages
 {
     public class IndexModel : PageModel
     {
+        private static ConcurrentDictionary<string, string> dataResult = new ConcurrentDictionary<string, string>();
         private readonly ILogger<IndexModel> _logger;
         public string Url { get; private set; }
-        public string Output { get; private set; }
+        public string Uuid { get; private set; }
 
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
         }
 
-        public void OnPost(string url, string option)
+        public void OnPost(string url, string option, string customParams)
         {
+            Uuid = System.Guid.NewGuid().ToString();
             Url = url;
-            string cmd = $"cd download && youtube-dl --verbose -f 140 {url}";
-            if ("video".Equals(option?.ToLower()))
+            // Define the cancellation token.
+            CancellationTokenSource source = new CancellationTokenSource();
+            CancellationToken token = source.Token;
+            Task.Factory.StartNew(() => Download(Uuid, url, option, customParams),
+            token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+        }
+
+        public JsonResult OnGetDownloadProgess(string uuid)
+        {
+            if (string.IsNullOrEmpty(uuid))
             {
-                cmd = $"cd download && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
-            } else if ("video1".Equals(option?.ToLower()))
-            {
-                cmd = $"cd download && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
+                return new JsonResult(new { code = -1, message = "Error" });
             }
-            _logger.LogInformation(cmd);
-             Output = cmd.Bash();
-            _logger.LogInformation(Output);
+            if (dataResult.TryGetValue(uuid, out string result))
+            {
+                Task.Factory.StartNew(() => {
+                    Task.Delay(10000);
+                    dataResult.TryRemove(uuid, out string d);
+                });
+
+                return new JsonResult(new { code = 2, message = "Finished", result = result });
+            }
+            else
+            {
+                return new JsonResult(new { code = 1, message = "Progresing" });
+            }
+        }
+
+        private string Download(string uuid, string url, string option, string customParams)
+        {
+            string result;
+            try
+            {
+                string cmd = $"cd download && youtube-dl --verbose -f 140 {url}";
+                if ("video".Equals(option?.ToLower()))
+                {
+                    cmd = $"cd download && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
+                }
+                else if ("video1".Equals(option?.ToLower()))
+                {
+                    cmd = $"cd download && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
+                }
+                else if ("custom".Equals(option?.ToLower()))
+                {
+                    cmd = $"cd download && youtube-dl --verbose -f '{customParams}' --merge-output-format mp4 {url}";
+                }
+                _logger.LogInformation(cmd);
+                result = cmd.Bash();
+                _logger.LogInformation(result);
+            }
+            catch (Exception e)
+            {
+                string cmd = $"youtube-dl -F {url}";
+                string listFormat = cmd.Bash();
+                result = $"{e.StackTrace} </br> {listFormat}";
+                _logger.LogError(e, "Error download youtube");
+            }
+            dataResult.TryAdd(uuid, result);
+            return result;
         }
     }
 }
