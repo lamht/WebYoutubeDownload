@@ -1,11 +1,15 @@
 ﻿<!DOCTYPE html>
+@{
+    var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+    ViewData["LegalCopyright"] = version.LegalCopyright;
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebYoutubeDownload</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -40,7 +44,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - WebYoutubeDownload - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; @ViewData["LegalCopyright"] - WebYoutubeDownload - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
 
