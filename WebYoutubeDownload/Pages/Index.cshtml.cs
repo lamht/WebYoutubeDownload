@@ -13,7 +13,7 @@ namespace WebYoutubeDownload.Pages
     {
         private static ConcurrentDictionary<string, string> dataResult = new ConcurrentDictionary<string, string>();
         private readonly ILogger<IndexModel> _logger;
-        public string Url { get; private set; }
+        public string YoutubeLink { get; private set; }
         public string Uuid { get; private set; }
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -24,7 +24,7 @@ namespace WebYoutubeDownload.Pages
         public void OnPost(string url, string option, string customParams)
         {
             Uuid = System.Guid.NewGuid().ToString();
-            Url = url;
+            YoutubeLink = url;
             // Define the cancellation token.
             CancellationTokenSource source = new CancellationTokenSource();
             CancellationToken token = source.Token;
