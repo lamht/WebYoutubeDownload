@@ -20,7 +20,7 @@ jobs:
     # Write all the steps you want to schedule
       - uses: actions/checkout@v2
       - name: Run gen buildtime file
-        run: echo "Current date: $(date)" > buildTime.txt
+        run: buildTime.sh
       - name: Update resources
         uses: test-room-7/action-update-file@v1.5.0
         with:
