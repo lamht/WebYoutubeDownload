@@ -5,7 +5,7 @@ name: Nightly Build
 
 on:
   schedule:
-    - cron: '2 3 * * 1'  
+    - cron: '5 1 */2 * *'  
   workflow_dispatch: 
 #workflow_dispatch helps run workflow anytime with a single click. 
 
