@@ -8,6 +8,7 @@
 {
     <h1 class="display-4">Welcome</h1>
     <form method="post">
+        @Html.AntiForgeryToken()
         <div class="form-group">
             <label for="url">Url</label>
             <input type="text" class="form-control" id="url" name="url" required />

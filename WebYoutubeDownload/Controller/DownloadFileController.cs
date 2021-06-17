@@ -21,6 +21,7 @@ namespace WebYoutubeDownload
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Index1([FromForm] string file)
         {
             string filePath = System.IO.Path.Combine(Constants.DOWNLOAD_FOLDER, file);

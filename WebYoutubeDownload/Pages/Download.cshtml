@@ -29,6 +29,7 @@
                     <h2 class="card-title">@System.IO.Path.GetExtension(f.Name)</h2>
                     <p class="card-text">@f.Name | @f.CreationTime </p>
                     <form action="download-file" method="post">
+                        @Html.AntiForgeryToken()
                         <input type="hidden" name="file" value="@f.Name" />
                         <button class="btn btn-primary">Download</button>
                     </form>
