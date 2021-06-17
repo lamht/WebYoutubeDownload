@@ -15,12 +15,16 @@ namespace WebYoutubeDownload.Pages
         public List<FileInfo> Files { get; private set; }
         public DownloadModel(ILogger<DownloadModel> logger)
         {
-            _logger = logger;
-            Files = Directory.GetFiles(Constants.DOWNLOAD_FOLDER).Select(f => new FileInfo(f)).ToList();          
+            _logger = logger;        
 
         }
         public void OnGet()
         {
+            if (!System.IO.Directory.Exists(Constants.DOWNLOAD_FOLDER))
+            {
+                System.IO.Directory.CreateDirectory(Constants.DOWNLOAD_FOLDER);
+            }
+            Files = Directory.GetFiles(Constants.DOWNLOAD_FOLDER).Select(f => new FileInfo(f)).ToList();
         }
     }
 }

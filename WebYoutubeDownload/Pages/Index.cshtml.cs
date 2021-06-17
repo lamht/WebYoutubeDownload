@@ -61,7 +61,10 @@ namespace WebYoutubeDownload.Pages
             try
             {
                 string downloadPath = Constants.DOWNLOAD_FOLDER;
-                string cmd = $"cd download && youtube-dl --verbose -f 140 {url}";
+                if(!System.IO.Directory.Exists(downloadPath)){
+                    System.IO.Directory.CreateDirectory(downloadPath);
+                }
+                string cmd = $"cd {downloadPath} && youtube-dl --verbose -f 140 {url}";
                 if ("video".Equals(option?.ToLower()))
                 {
                     cmd = $"cd {downloadPath} && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
