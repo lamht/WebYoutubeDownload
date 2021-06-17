@@ -60,18 +60,19 @@ namespace WebYoutubeDownload.Pages
             string result;
             try
             {
+                string downloadPath = Constants.DOWNLOAD_FOLDER;
                 string cmd = $"cd download && youtube-dl --verbose -f 140 {url}";
                 if ("video".Equals(option?.ToLower()))
                 {
-                    cmd = $"cd download && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
+                    cmd = $"cd {downloadPath} && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
                 }
                 else if ("video1".Equals(option?.ToLower()))
                 {
-                    cmd = $"cd download && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
+                    cmd = $"cd {downloadPath} && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
                 }
                 else if ("custom".Equals(option?.ToLower()))
                 {
-                    cmd = $"cd download && youtube-dl --verbose -f '{customParams}' --merge-output-format mp4 {url}";
+                    cmd = $"cd {downloadPath} && youtube-dl --verbose -f '{customParams}' --merge-output-format mp4 {url}";
                 }
                 _logger.LogInformation(cmd);
                 result = cmd.Bash();
