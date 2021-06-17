@@ -16,7 +16,7 @@ namespace WebYoutubeDownload.Pages
         public DownloadModel(ILogger<DownloadModel> logger)
         {
             _logger = logger;
-            Files = Directory.GetFiles("download").Select(f => new FileInfo(f)).ToList();          
+            Files = Directory.GetFiles(Constants.DOWNLOAD_FOLDER).Select(f => new FileInfo(f)).ToList();          
 
         }
         public void OnGet()

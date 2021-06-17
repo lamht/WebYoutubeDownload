@@ -15,7 +15,7 @@
  </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="download\" />
+    <None Include="wwwroot\download\a.txt" />
   </ItemGroup>
 
 </Project>

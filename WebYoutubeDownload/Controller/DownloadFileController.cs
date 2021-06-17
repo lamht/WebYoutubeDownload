@@ -23,7 +23,7 @@ namespace WebYoutubeDownload
         [HttpPost]
         public IActionResult Index1([FromForm] string file)
         {
-            string filePath = $"download/{file}";
+            string filePath = System.IO.Path.Combine(Constants.DOWNLOAD_FOLDER, file);
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound(new { file = $"Not found {file}" });
