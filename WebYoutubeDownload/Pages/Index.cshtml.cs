@@ -65,11 +65,20 @@ namespace WebYoutubeDownload.Pages
                     System.IO.Directory.CreateDirectory(downloadPath);
                 }
                 string cmd = $"cd {downloadPath} && youtube-dl --verbose -f 140 {url}";
-                if ("video".Equals(option?.ToLower()))
+                option = option?.ToLower();
+                if ("audio-m4a".Equals(option))
+                {
+                    cmd = $"cd {downloadPath} && youtube-dl --verbose -f 140 {url}";
+                }
+                else if ("audio-opus".Equals(option))
+                {
+                    cmd = $"cd {downloadPath} && youtube-dl --verbose -f 251 {url}";
+                }
+                else if ("video".Equals(option))
                 {
                     cmd = $"cd {downloadPath} && youtube-dl --verbose -f '136+140' --merge-output-format mp4 {url}";
                 }
-                else if ("video1".Equals(option?.ToLower()))
+                else if ("video1".Equals(option))
                 {
                     cmd = $"cd {downloadPath} && youtube-dl --verbose -f '137+140' --merge-output-format mp4 {url}";
                 }
